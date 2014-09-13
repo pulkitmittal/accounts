@@ -47,6 +47,7 @@ angular
 				$root.loadingView = true;
 			}
 		} catch(err) {
+			console.log(err);
 			$root.message = messages.notfound;
 		}
 	});
@@ -95,20 +96,34 @@ angular
 	})
 	.when('/manufacturer/add', {
 		templateUrl: 'partials/add/manufacturer.html',
-		controller: 'ManufacturerCtrl',
+		controller: 'ManufacturerCtrl'
+	})
+	.when('/manufacturer/:id', {
+		templateUrl: 'partials/add/manufacturer.html',
+		controller: 'ManufacturerViewCtrl',
 		resolve: {
-			// I will cause a 1 second delay
-			delay: function($q, $timeout) {
-				var delay = $q.defer();
-				$timeout(delay.resolve, 1000);
-				return delay.promise;
+			manufacturer: function($q, $http, $route) {
+				var id = $route.current.params.id;
+				var promise = $http({ method: 'GET', url: '/manufacturer/'+id }).success(function(data, status, headers, config) {
+					return data;
+				});
+				return promise;
+			}
+		}
+	})
+	.when('/manufacturers', {
+		templateUrl: 'partials/view/manufacturers.html',
+		controller: 'ManufacturersViewCtrl',
+		resolve: {
+			manufacturers: function($http) {
+				var promise = $http({ method: 'GET', url: '/manufacturers' }).success(function(data, status, headers, config) {
+					return data;
+				});
+				return promise;
 			}
 		}
 	});
 })
 .controller('HomeCtrl', function($scope) {
-
-})
-.controller('ManufacturerCtrl', function($scope, $route, $routeParams, $location) {
 
 });

@@ -1,31 +1,59 @@
 <section id="manufacturer" data-ng-controller="ManufacturerCtrl">
 	<div class="page-header">
-		<h1>Add a Manufacturer</h1>
+		<h1 ng-if="!manufacturer.id">Add a Manufacturer</h1>
+		<h1 ng-if="manufacturer.id">Update Manufacturer</h1>
 	</div>
 	<div class="col-md-6 show-grid">
-		<div>
-			<div class="form-group">
-				<label>Name:</label> <input type="text" ng-model="dealer.name"
-					class="form-control">
+		<form class="form-horizontal">
+			<input type="hidden" ng-model="manufacturer.id">
+			<div class="form-group" ng-class="{'has-error': errors.name}">
+				<label class="col-sm-3 control-label">Name*:</label>
+				<div class="col-sm-9">
+					<input type="text" ng-model="manufacturer.name" class="form-control" value=""
+						ng-trim="true">
+					<p class="help-block" ng-bind="errors.name"></p>
+				</div>
 			</div>
-			<div class="form-group">
-				<label>Address:</label> <input type="text" ng-model="dealer.address"
-					class="form-control">
+			<div class="form-group" ng-class="{'has-error': errors.address}">
+				<label class="col-sm-3 control-label">Address:</label>
+				<div class="col-sm-9">
+					<input type="text" ng-model="manufacturer.address" class="form-control" value=""
+						ng-trim="true">
+					<p class="help-block" ng-bind="errors.address"></p>
+				</div>
 			</div>
-			<div class="form-group">
-				<label>City:</label> <input type="text" ng-model="dealer.city"
-					class="form-control">
+			<div class="form-group" ng-class="{'has-error': errors.city}">
+				<label class="col-sm-3 control-label">City*:</label>
+				<div class="col-sm-9">
+					<input type="text" ng-model="manufacturer.city" value=""
+						placeholder="Start typing..." class="form-control" typeahead-min-length="2"
+						typeahead="address.description for address in getLocation($viewValue)"
+						typeahead-wait-ms="500" typeahead-loading="loadingLocations"
+						ng-change="setLocation($item)" typeahead-on-select="setLocation($item)"
+						ng-trim="true" >
+					<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+					<p class="help-block" ng-bind="errors.city"></p>
+				</div>
 			</div>
-			<div class="form-group">
-				<label>State:</label> <input type="text" ng-model="dealer.state"
-					class="form-control">
+			<div class="form-group" ng-class="{'has-error': errors.state}">
+				<label class="col-sm-3 control-label">State*:</label>
+				<div class="col-sm-9">
+					<select class="form-control" ng-model="manufacturer.state" ng-options="state for state in states">
+						<option value="">--Select State--</option>
+					</select>
+					<p class="help-block" ng-bind="errors.state"></p>
+				</div>
 			</div>
-			<div class="form-group">
-				<label>TIN:</label> <input type="text" ng-model="dealer.tin"
-					class="form-control">
+			<div class="form-group" ng-class="{'has-error': errors.tin}">
+				<label class="col-sm-3 control-label">TIN:</label>
+				<div class="col-sm-9">
+					<input type="text" ng-model="manufacturer.tin" class="form-control" value="" ng-trim="">
+					<p class="help-block" ng-bind="errors.tin"></p>
+				</div>
 			</div>
-			<button type="submit" class="btn btn-primary">Submit</button>
-			<button type="reset" class="btn btn-disabled">Reset</button>
-		</div>
+			<div class="pull-right">*Required fields</div>
+			<button type="submit" class="btn btn-primary" ng-click="submit()" ng-disabled="isEmpty(manufacturer) || submitting">{{!manufacturer.id ? 'Submit' : 'Update'}}</button>
+			<a class="btn btn-default" ng-click="reset();">Reset</a>
+		</form>
 	</div>
 </section>

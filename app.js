@@ -4,11 +4,10 @@
  */
 
 var express = require('express')
-  //, routes = require('./routes')
-  , http = require('http')
-  , https = require('https')
-  , path = require('path')
-  , mysql = require('mysql');
+	, http = require('http')
+	, https = require('https')
+	, path = require('path')
+	, mysql = require('mysql');
 
 var app = express();
 
@@ -25,7 +24,7 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
-if ('development' == app.get('env')) {
+if ('development' === app.get('env')) {
   app.use(express.errorHandler());
 }
 
@@ -56,16 +55,16 @@ app.get('/getLocations', function(req, res) {
 			"&offset=0&components=country:in&types=geocode&key=AIzaSyB2me4z9TltDLyr5StlXjtdbKp0EMhpdtk";
 	
 	https.get(url, function (response) {
-        var buffer = "";
-        response.on("data", function (chunk) {
-            buffer += chunk;
-        });
-        response.on("end", function (err) {
-        	res.json(buffer);
-        });
-    }).on('error', function (e) {
-        res.json(null);
-    });
+		var buffer = "";
+		response.on("data", function (chunk) {
+			buffer += chunk;
+		});
+		response.on("end", function (err) {
+			res.json(buffer);
+		});
+	}).on('error', function (e) {
+		res.json(null);
+	});
 });
 
 //Handle 404
@@ -81,6 +80,7 @@ app.use(function(error, req, res, next) {
 });
 
 require("./routes/dealercontroller.js")(app, connection);
+require("./routes/manufacturercontroller.js")(app, connection);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

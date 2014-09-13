@@ -1,0 +1,34 @@
+<section id="manufacturers" data-ng-controller="ManufacturerCtrl">
+	<div class="page-header">
+		<h1>View Manufacturers</h1>
+	</div>
+	<div class="col-md-12 show-grid">
+		<table class="table table-striped table-hover table-bordered">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Address</th>
+					<th>City</th>
+					<th>State</th>
+					<th>TIN</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="manufacturer in manufacturers" ng-class="{disabled: deletingRow == $index}">
+					<td>{{$index+1}}</td>
+					<td>{{manufacturer.NAME}}</td>
+					<td>{{manufacturer.ADDRESS}}</td>
+					<td>{{manufacturer.CITY}}</td>
+					<td>{{manufacturer.STATE}}</td>
+					<td>{{manufacturer.TIN}}</td>
+					<td class="text-right">
+						<a class="btn btn-primary btn-xs" ng-href="#manufacturer/{{manufacturer.ID}}">Update</a>
+						<a class="btn btn-default btn-xs" ng-click="deleteManufacturer(this.manufacturer, $index)">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>

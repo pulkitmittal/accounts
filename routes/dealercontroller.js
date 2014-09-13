@@ -1,3 +1,5 @@
+var utils = require('./utils');
+
 module.exports = function (app, mysql) {
 
 	app.post('/dealer/add', function (req, res) {
@@ -5,20 +7,20 @@ module.exports = function (app, mysql) {
 		// apply validations
 		var dealer = req.body.dealer;
 		var errors = {};
-		if(isEmpty(dealer.name)) {
+		if(utils.isEmpty(dealer.name)) {
 			errors.name = 'This is required.';
 		}
-		if(isEmpty(dealer.city)) {
+		if(utils.isEmpty(dealer.city)) {
 			errors.city = 'This is required.';
 		}
-		if(isEmpty(dealer.state)) {
+		if(utils.isEmpty(dealer.state)) {
 			errors.state = 'This is required.';
 		}
-		if(!isTINValid(dealer.tin)) {
+		if(!utils.isTINValid(dealer.tin)) {
 			errors.tin = 'TIN should be 10 digits.';
 		}
 		
-		if(!isEmpty(errors)) {
+		if(!utils.isEmpty(errors)) {
 			res.json({
 				done: false,
 				error: 'There are some errors in the values submitted.',
@@ -34,14 +36,14 @@ module.exports = function (app, mysql) {
 			};
 			
 			if(dealer.id) { // update operation
-				var query = mysql.query('UPDATE dealers SET ? WHERE ID = ?', [dealerObj, dealer.id], function(err, result) {
+				mysql.query('UPDATE dealers SET ? WHERE ID = ?', [dealerObj, dealer.id], function(err, result) {
 					res.json({
 						done: err ? false : true,
 						error: JSON.stringify(err)
 					});
 				});
 			} else { // add operation
-				var query = mysql.query('INSERT INTO dealers SET ?', dealerObj, function(err, result) {
+				mysql.query('INSERT INTO dealers SET ?', dealerObj, function(err, result) {
 					res.json({
 						done: err ? false : true,
 						error: JSON.stringify(err)
@@ -60,7 +62,7 @@ module.exports = function (app, mysql) {
 				error: 'Some error occured. Please try again.'
 			});
 		} else {
-			var query = mysql.query('DELETE FROM dealers WHERE ID = ?', id, function(err, result) {
+			mysql.query('DELETE FROM dealers WHERE ID = ?', id, function(err, result) {
 				console.log(result);
 				res.json({
 					done: err ? false : true,
@@ -73,7 +75,7 @@ module.exports = function (app, mysql) {
 	
 	app.get('/dealers', function(req, res) {
 		console.log('Request for all dealers');
-		var query = mysql.query('SELECT * FROM dealers', function(err, result) {
+		mysql.query('SELECT * FROM dealers', function(err, result) {
 			console.log(result);
 			res.json({
 				done: err ? false : true,
@@ -86,10 +88,10 @@ module.exports = function (app, mysql) {
 	app.get('/dealer/:id', function(req, res) {
 		var id = req.params.id;
 		console.log('Request for dealer:' + id);
-		var query = mysql.query('SELECT * FROM dealers WHERE id = ?', [id], function(err, result) {
+		mysql.query('SELECT * FROM dealers WHERE id = ?', [id], function(err, result) {
 			console.log(result);
 			var dealer = {};
-			if(!result || result.length == 0) {
+			if(!result || result.length === 0) {
 				err = 'No dealer found for id '+id;
 			} else {
 				dealer = {
@@ -108,25 +110,4 @@ module.exports = function (app, mysql) {
 			});
 		});
 	});
-
-};
-
-var isEmpty = function(obj) {
-	obj = obj || '';
-	if(typeof obj === "string") {
-		return obj === '' || obj.length === 0;
-	}
-	else if(typeof obj === "object") {
-		if(obj.length) { // array
-			return obj.length === 0;
-		}
-		else {
-			return Object.keys(obj).length === 0;
-		}
-	}
-};
-
-var isTINValid = function(tin) {
-	var reg_ex = /^\d{10}$/;
-	return isEmpty(tin) || (!isNaN(parseInt(tin)) && reg_ex.test(parseInt(tin)));
 };
