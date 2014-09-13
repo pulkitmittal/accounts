@@ -122,6 +122,35 @@ angular
 				return promise;
 			}
 		}
+	})
+	.when('/transporter/add', {
+		templateUrl: 'partials/add/transporter.html',
+		controller: 'TransporterCtrl'
+	})
+	.when('/transporter/:id', {
+		templateUrl: 'partials/add/transporter.html',
+		controller: 'TransporterViewCtrl',
+		resolve: {
+			transporter: function($q, $http, $route) {
+				var id = $route.current.params.id;
+				var promise = $http({ method: 'GET', url: '/transporter/'+id }).success(function(data, status, headers, config) {
+					return data;
+				});
+				return promise;
+			}
+		}
+	})
+	.when('/transporters', {
+		templateUrl: 'partials/view/transporters.html',
+		controller: 'TransportersViewCtrl',
+		resolve: {
+			transporters: function($http) {
+				var promise = $http({ method: 'GET', url: '/transporters' }).success(function(data, status, headers, config) {
+					return data;
+				});
+				return promise;
+			}
+		}
 	});
 })
 .controller('HomeCtrl', function($scope) {
