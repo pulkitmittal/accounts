@@ -1,0 +1,34 @@
+<section id="dealer" data-ng-controller="DealerCtrl">
+	<div class="page-header">
+		<h1>View Dealers</h1>
+	</div>
+	<div class="col-md-12 show-grid">
+		<table class="table table-striped table-hover table-bordered">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Address</th>
+					<th>City</th>
+					<th>State</th>
+					<th>TIN</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="dealer in dealers" ng-class="{disabled: deletingRow == $index}">
+					<td>{{$index+1}}</td>
+					<td>{{dealer.NAME}}</td>
+					<td>{{dealer.ADDRESS}}</td>
+					<td>{{dealer.CITY}}</td>
+					<td>{{dealer.STATE}}</td>
+					<td>{{dealer.TIN}}</td>
+					<td class="text-right">
+						<a class="btn btn-primary btn-xs" ng-href="#dealer/{{dealer.ID}}">Update</a>
+						<a class="btn btn-default btn-xs" ng-click="deleteDealer(this.dealer, $index)">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
