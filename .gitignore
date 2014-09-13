@@ -2,6 +2,6 @@
 .project
 .tern-project
 .settings/
-./node_modules/
+node_modules/
 
-./public/bower_components/
+public/bower_components/
