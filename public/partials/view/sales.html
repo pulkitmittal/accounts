@@ -1,0 +1,46 @@
+<section id="dealer">
+	<div class="page-header">
+		<h1>View Sales</h1>
+	</div>
+	<div class="col-md-12 show-grid">
+		<table class="table table-striped table-hover table-bordered">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Sale Type</th>
+					<th>Dealer</th>
+					<th class="nowrap">Invoice #</th>
+					<th>Invoice Date</th>
+					<th>Item Type</th>
+					<th>Item Quantity</th>
+					<th>Item Rate</th>
+					<th>VAT</th>
+					<th>Add Tax</th>
+					<th>Invoice Amount</th>
+					<th>Credit Amount</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="sale in sales" ng-class="{disabled: deletingRow == $index}">
+					<td>{{$index+1}}</td>
+					<td class="nowrap">{{sale.TYPE}}</td>
+					<td>{{sale.DEALER}}</td>
+					<td class="text-right">{{sale.INVOICE_NO}}</td>
+					<td class="nowrap">{{sale.INVOICE_DATE | date:'dd-MM-yyyy'}}</td>
+					<td>{{sale.ITEM}}</td>
+					<td>{{sale.ITEM_QUANTITY}} Kg</td>
+					<td class="text-right">&#8377;{{sale.ITEM_RATE}}/Kg</td>
+					<td class="text-right">&#8377;{{sale.VAT_TAX}}</td>
+					<td class="text-right">&#8377;{{sale.ADD_TAX}}</td>
+					<td class="text-right">&#8377;{{sale.INVOICE_AMOUNT}}</td>
+					<td class="text-right">&#8377;{{sale.CREDIT_AMOUNT}}</td>
+					<td class="text-right nowrap">
+						<a class="btn btn-primary btn-xs" ng-href="#sale/{{sale.ID}}">Update</a>
+						<a class="btn btn-default btn-xs" ng-click="deleteSale(this.sale, $index)">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
