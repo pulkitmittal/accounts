@@ -9,6 +9,7 @@
     "express": "3.2.6",
     "ejs": "*",
     "bower": "latest",
-    "mysql": "latest"
+    "mysql": "latest",
+    "moment": "~2.8.3"
   }
 }

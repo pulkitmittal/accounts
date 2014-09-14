@@ -1,7 +1,7 @@
 var utils = {};
 
 utils.isEmpty = function(obj) {
-	obj = obj || '';
+	obj = obj == undefined ? '' : obj;
 	if(typeof obj === "string") {
 		return obj === '' || obj.length === 0;
 	}
@@ -13,6 +13,13 @@ utils.isEmpty = function(obj) {
 			return Object.keys(obj).length === 0;
 		}
 	}
+	else if(typeof obj === "number") {
+		return false;
+	}
+};
+
+utils.isNumeric = function(val) {
+	return !isNaN(val);
 };
 
 utils.isTINValid = function(tin) {

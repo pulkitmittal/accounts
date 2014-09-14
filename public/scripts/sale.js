@@ -7,6 +7,20 @@ angular
 	$scope.dealers = dealers && dealers.status === 200 && dealers.data.done === true ? dealers.data.response : [];
 	$scope.item_types = item_types && item_types.status === 200 && item_types.data.done === true ? item_types.data.response : [];
 	
+	// fix some sale attributes
+	if($scope.sale && $scope.sale.dealer) {
+		var dealerId = $scope.sale.dealer;
+		$scope.sale.dealer = $scope.dealers.filter(function(f) {
+			return f.ID === dealerId;
+		})[0];
+	}
+	if($scope.sale && $scope.sale.item_type) {
+		var itemTypeId = $scope.sale.item_type;
+		$scope.sale.item_type = $scope.item_types.filter(function(f) {
+			return f.ID === itemTypeId;
+		})[0];
+	}
+	
 	$scope.filterDealer = function(elm) {
 		if($scope.sale.type === 'Tax Invoice') {
 			return !elm.TIN;

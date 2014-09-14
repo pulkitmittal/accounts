@@ -1,6 +1,8 @@
 var utils = require('./utils');
 
-module.exports = function (app, mysql) {
+module.exports = function (app, packages) {
+	
+	var mysql = packages.mysql;
 
 	app.post('/dealer/add', function (req, res) {
 

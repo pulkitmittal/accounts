@@ -7,7 +7,8 @@ var express = require('express')
 	, http = require('http')
 	, https = require('https')
 	, path = require('path')
-	, mysql = require('mysql');
+	, mysql = require('mysql')
+	, moment = require('moment');
 
 var app = express();
 
@@ -89,10 +90,14 @@ app.use(function(error, req, res, next) {
 	res.send('500: Internal Server Error', 500);
 });
 
-require("./routes/dealercontroller.js")(app, connection);
-require("./routes/manufacturercontroller.js")(app, connection);
-require("./routes/transportercontroller.js")(app, connection);
-require("./routes/salecontroller.js")(app, connection);
+var packages = {
+	mysql: connection,
+	moment: moment
+};
+require("./routes/dealercontroller.js")(app, packages);
+require("./routes/manufacturercontroller.js")(app, packages);
+require("./routes/transportercontroller.js")(app, packages);
+require("./routes/salecontroller.js")(app, packages);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

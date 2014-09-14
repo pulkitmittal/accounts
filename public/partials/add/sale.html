@@ -31,7 +31,7 @@
 							</a>
 						</span>
 					</div>
-					<p class="help-block" ng-bind="errors.city"></p>
+					<p class="help-block" ng-bind="errors.dealer"></p>
 				</div>
 			</div>
 			<div class="form-group" ng-class="{'has-error': errors.invoice_no || isNaN(sale.invoice_no)}">
@@ -83,6 +83,7 @@
 				<label class="col-sm-3 control-label">Item Rate:</label>
 				<div class="col-sm-9">
 					<div class="input-group">
+						<span class="input-group-addon">&#8377;</span>
 						<input type="text" ng-model="sale.item_rate" class="form-control" ng-change="update()"
 							ng-trim="true">
 						<span class="input-group-addon">per Kg</span>
@@ -104,7 +105,7 @@
 							</div>
 						</div>
 					</div>
-					<p class="help-block" ng-bind="errors.tin"></p>
+					<p class="help-block" ng-bind="errors.vat_tax"></p>
 				</div>
 			</div>
 			<div class="form-group" ng-class="{'has-error': errors.add_tax}">
@@ -121,7 +122,7 @@
 							</div>
 						</div>
 					</div>
-					<p class="help-block" ng-bind="errors.tin"></p>
+					<p class="help-block" ng-bind="errors.add_tax"></p>
 				</div>
 			</div>
 			<div class="form-group" ng-class="{'has-error': errors.invoice_amount || isNaN(sale.invoice_amount)}">

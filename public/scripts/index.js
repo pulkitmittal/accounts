@@ -11,7 +11,7 @@ angular
 	var functions = {};
 	
 	functions.isEmpty = function(obj) {
-		obj = obj || '';
+		obj = obj == undefined ? '' : obj;
 		if(typeof obj === "string") {
 			return obj === '' || obj.length === 0;
 		}
@@ -22,6 +22,9 @@ angular
 			else {
 				return Object.keys(obj).length === 0;
 			}
+		}
+		else if(typeof obj === "number") {
+			return false;
 		}
 	};
 	
@@ -84,6 +87,20 @@ angular
 	
 	functions.getItemTypes = function() {
 		var promise = $http({ method: 'GET', url: '/item_types' }).success(function(data, status, headers, config) {
+			return data;
+		});
+		return promise;
+	};
+	
+	functions.getSales = function() {
+		var promise = $http({ method: 'GET', url: '/sales' }).success(function(data, status, headers, config) {
+			return data;
+		});
+		return promise;
+	};
+	
+	functions.getSale = function(id) {
+		var promise = $http({ method: 'GET', url: '/sale/'+id }).success(function(data, status, headers, config) {
 			return data;
 		});
 		return promise;
@@ -222,6 +239,31 @@ angular
 			},
 			item_types: function(Utils) {
 				return Utils.getItemTypes();
+			}
+		}
+	})
+	.when('/sale/:id', {
+		templateUrl: 'partials/add/sale.html',
+		controller: 'SaleCtrl',
+		resolve: {
+			sale: function($route, Utils) {
+				var id = $route.current.params.id;
+				return Utils.getSale(id);
+			},
+			dealers: function(Utils) {
+				return Utils.getDealers();
+			},
+			item_types: function(Utils) {
+				return Utils.getItemTypes();
+			}
+		}
+	})
+	.when('/sales', {
+		templateUrl: 'partials/view/sales.html',
+		controller: 'SalesViewCtrl',
+		resolve: {
+			sales: function(Utils) {
+				return Utils.getSales();
 			}
 		}
 	});
