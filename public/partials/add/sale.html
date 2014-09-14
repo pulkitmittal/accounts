@@ -1,0 +1,74 @@
+<section id="sale">
+	<div class="page-header">
+		<h1 ng-if="!sale.id">Add a Sale</h1>
+		<h1 ng-if="sale.id">Update Sale</h1>
+	</div>
+	<div class="col-md-6 show-grid">
+		<form class="form-horizontal">
+			<input type="hidden" ng-model="sale.id">
+			<div class="form-group" ng-class="{'has-error': errors.type}">
+				<label class="col-sm-3 control-label">Type:</label>
+				<div class="col-sm-9">
+					<select ng-model="sale.type" class="form-control">
+						<option value="Sales Invoice">Sales Invoice</option>
+						<option value="Tax Invoice">Tax Invoice</option>
+					</select>
+					<p class="help-block" ng-bind="errors.type"></p>
+				</div>
+			</div>
+			<div class="form-group" ng-class="{'has-error': errors.dealer}">
+				<label class="col-sm-3 control-label">Dealer*:</label>
+				<div class="col-sm-9">
+					<input type="text" ng-model="sale.dealer" value=""
+						placeholder="Start typing..." class="form-control"
+						typeahead="dealer as dealer.NAME+', '+dealer.CITY for dealer in dealers | omit: filterDealer | filterBy:['NAME']:$viewValue | limitTo: 10"
+						ng-trim="true" >
+					<p class="help-block" ng-bind="errors.city"></p>
+				</div>
+			</div>
+			<div class="form-group" ng-class="{'has-error': errors.invoice_no}">
+				<label class="col-sm-3 control-label">Invoice #:</label>
+				<div class="col-sm-9">
+					<input type="text" ng-model="sale.invoice_no" class="form-control" value=""
+						ng-trim="true">
+					<p class="help-block" ng-bind="errors.invoice_no"></p>
+				</div>
+			</div>
+			<div class="form-group" ng-class="{'has-error': errors.invoice_date}">
+				<label class="col-sm-3 control-label">Invoice Date:</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<input type="text" class="form-control"
+							datepicker-popup="dd-MM-yyyy" ng-model="sale.invoice_date" is-open="opened"
+							close-text="Close" />
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default" ng-click="open($event)">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
+					</div>
+					<p class="help-block" ng-bind="errors.invoice_date"></p>
+				</div>
+			</div>
+			<div class="form-group" ng-class="{'has-error': errors.item_type}">
+				<label class="col-sm-3 control-label">Item Type:</label>
+				<div class="col-sm-9">
+					<select ng-model="sale.item_type" class="form-control" ng-options="type as type.NAME for type in item_types | orderBy: 'NAME'">
+						<option value="">--Select Item Type--</option>
+					</select>
+					<p class="help-block" ng-bind="errors.item_type"></p>
+				</div>
+			</div>
+			<div class="form-group" ng-class="{'has-error': errors.tin}">
+				<label class="col-sm-3 control-label">TIN:</label>
+				<div class="col-sm-9">
+					<input type="text" ng-model="sale.tin" class="form-control" value="" ng-trim="">
+					<p class="help-block" ng-bind="errors.tin"></p>
+				</div>
+			</div>
+			<div class="pull-right">*All fields are required</div>
+			<button type="submit" class="btn btn-primary" ng-click="submit()" ng-disabled="isEmpty(sale) || submitting">{{!sale.id ? 'Submit' : 'Update'}}</button>
+			<a class="btn btn-default" ng-click="reset();">Reset</a>
+		</form>
+	</div>
+</section>
