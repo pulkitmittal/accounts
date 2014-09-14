@@ -1,10 +1,11 @@
 angular
 .module('index')
-.controller('TransporterCtrl', function($scope, $http, $rootScope, $route, $window, states, Utils) {
+.controller('TransporterCtrl', function($scope, $http, $rootScope, $route, $window, transporter, states, Utils) {
 	
 	$scope.isEmpty = Utils.isEmpty;
 	$scope.getLocation = Utils.getLocation;
 	$scope.states = states;
+	$scope.transporter = transporter && transporter.status === 200 && transporter.data.done === true ? transporter.data.response : {};
 
 	$scope.setLocation = function($item) {
 		if(!$item || $item.terms.length < 3)
@@ -87,9 +88,6 @@ angular
 			});
 		}
 	};
-})
-.controller('TransporterViewCtrl', function($scope, $http, transporter) {
-	$scope.transporter = transporter && transporter.status === 200 && transporter.data.done === true ? transporter.data.response : {};
 })
 .controller('TransportersViewCtrl', function($scope, $http, transporters) {
 	$scope.transporters = transporters && transporters.status === 200 && transporters.data.done === true ? transporters.data.response : [];

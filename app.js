@@ -49,7 +49,6 @@ app.get('/', function(req, res) {
 });
 
 app.get('/getLocations', function(req, res) {
-	
 	var val = req.query.q;
 	var url = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input="+val+
 			"&offset=0&components=country:in&types=geocode&key=AIzaSyB2me4z9TltDLyr5StlXjtdbKp0EMhpdtk";
@@ -64,6 +63,17 @@ app.get('/getLocations', function(req, res) {
 		});
 	}).on('error', function (e) {
 		res.json(null);
+	});
+});
+
+app.get('/item_types', function (req, res) {
+	connection.query('SELECT * FROM goods', function(err, result) {
+		console.log(result);
+		res.json({
+			done: err ? false : true,
+			error: JSON.stringify(err),
+			response: result
+		});
 	});
 });
 

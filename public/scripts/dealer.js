@@ -1,10 +1,11 @@
 angular
 .module('index')
-.controller('DealerCtrl', function($scope, $http, $rootScope, $route, $window, states, Utils) {
+.controller('DealerCtrl', function($scope, $http, $rootScope, $route, $window, dealer, states, Utils) {
 	
 	$scope.isEmpty = Utils.isEmpty;
 	$scope.getLocation = Utils.getLocation;
 	$scope.states = states;
+	$scope.dealer = dealer && dealer.status === 200 && dealer.data.done === true ? dealer.data.response : {};
 
 	$scope.setLocation = function($item) {
 		if(!$item || $item.terms.length < 3)
@@ -88,9 +89,6 @@ angular
 		}
 	};
 })
-.controller('DealerViewCtrl', function($scope, $http, dealer) {
-	$scope.dealer = dealer && dealer.status === 200 && dealer.data.done === true ? dealer.data.response : {};
-})
-.controller('DealersViewCtrl', function($scope, $http, dealers) {
+.controller('DealersViewCtrl', function($scope, $http, $rootScope, dealers) {
 	$scope.dealers = dealers && dealers.status === 200 && dealers.data.done === true ? dealers.data.response : [];
 });

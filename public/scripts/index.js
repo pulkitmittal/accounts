@@ -1,5 +1,5 @@
 angular
-.module('index', ['ngRoute','ui.bootstrap','ngResource','ngSanitize'])
+.module('index', ['ngRoute','ui.bootstrap','ngResource','ngSanitize','angular.filter'])
 .value('messages', {
 	notfound: {
 		text: 'The location cannot be found. Please try again.',
@@ -9,6 +9,7 @@ angular
 .value('states', new Array("Andaman and Nicobar Islands", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chandigarh", "Chhattisgarh", "Dadra and Nagar Haveli", "Daman and Diu", "Delhi", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jammu and Kashmir", "Jharkhand", "Karnataka", "Kerala", "Lakshadweep", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Orissa", "Pondicherry", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttaranchal", "Uttar Pradesh", "West Bengal"))
 .factory('Utils', function($http) {
 	var functions = {};
+	
 	functions.isEmpty = function(obj) {
 		obj = obj || '';
 		if(typeof obj === "string") {
@@ -23,6 +24,7 @@ angular
 			}
 		}
 	};
+	
 	functions.getLocation = function(val) {
 		return $http.get('/getLocations', {
 			params: {
@@ -37,9 +39,58 @@ angular
 			return addresses;
 		});
 	};
+	
+	functions.getDealer = function(id) {
+		var promise = $http({ method: 'GET', url: '/dealer/'+id }).success(function(data, status, headers, config) {
+			return data;
+		});
+		return promise;
+	};
+	
+	functions.getDealers = function() {
+		var promise = $http({ method: 'GET', url: '/dealers' }).success(function(data, status, headers, config) {
+			return data;
+		});
+		return promise;
+	};
+	
+	functions.getManufacturer = function(id) {
+		var promise = $http({ method: 'GET', url: '/manufacturer/'+id }).success(function(data, status, headers, config) {
+			return data;
+		});
+		return promise;
+	};
+	
+	functions.getManufacturers = function() {
+		var promise = $http({ method: 'GET', url: '/manufacturers' }).success(function(data, status, headers, config) {
+			return data;
+		});
+		return promise;
+	};
+	
+	functions.getTransporter = function(id) {
+		var promise = $http({ method: 'GET', url: '/transporter/'+id }).success(function(data, status, headers, config) {
+			return data;
+		});
+		return promise;
+	};
+	
+	functions.getTransporters = function() {
+		var promise = $http({ method: 'GET', url: '/transporters' }).success(function(data, status, headers, config) {
+			return data;
+		});
+		return promise;
+	};
+	
+	functions.getItemTypes = function() {
+		var promise = $http({ method: 'GET', url: '/item_types' }).success(function(data, status, headers, config) {
+			return data;
+		});
+		return promise;
+	};
 	return functions;
 })
-.run(['$rootScope', 'messages', function($root, messages) {
+.run(['$rootScope', '$timeout', 'messages', function($root, $timeout, messages) {
 	$root.$on('$routeChangeStart', function(e, curr, prev) {
 		$root.message = '';
 		try {
@@ -53,6 +104,9 @@ angular
 	});
 	$root.$on('$routeChangeSuccess', function(e, curr, prev) {
 		$root.loadingView = false;
+		$timeout(function() {
+			$root.heading = 'Sanjay Sales | '+ angular.element(document.getElementsByTagName('h1')).text();
+		}, 100);
 	});
 	$root.$on('$routeChangeError', function(e, curr, prev) {
 		$root.message = messages.notfound;
@@ -67,18 +121,20 @@ angular
 	})
 	.when('/dealer/add', {
 		templateUrl: 'partials/add/dealer.html',
-		controller: 'DealerCtrl'
+		controller: 'DealerCtrl',
+		resolve: {
+			dealer: function() {
+				return {};
+			}
+		}
 	})
 	.when('/dealer/:id', {
 		templateUrl: 'partials/add/dealer.html',
-		controller: 'DealerViewCtrl',
+		controller: 'DealerCtrl',
 		resolve: {
-			dealer: function($q, $http, $route) {
+			dealer: function($route, Utils) {
 				var id = $route.current.params.id;
-				var promise = $http({ method: 'GET', url: '/dealer/'+id }).success(function(data, status, headers, config) {
-					return data;
-				});
-				return promise;
+				return Utils.getDealer(id);
 			}
 		}
 	})
@@ -86,28 +142,27 @@ angular
 		templateUrl: 'partials/view/dealers.html',
 		controller: 'DealersViewCtrl',
 		resolve: {
-			dealers: function($http) {
-				var promise = $http({ method: 'GET', url: '/dealers' }).success(function(data, status, headers, config) {
-					return data;
-				});
-				return promise;
+			dealers: function(Utils) {
+				return Utils.getDealers();
 			}
 		}
 	})
 	.when('/manufacturer/add', {
 		templateUrl: 'partials/add/manufacturer.html',
-		controller: 'ManufacturerCtrl'
+		controller: 'ManufacturerCtrl',
+		resolve: {
+			manufacturer: function() {
+				return {};
+			}
+		}
 	})
 	.when('/manufacturer/:id', {
 		templateUrl: 'partials/add/manufacturer.html',
-		controller: 'ManufacturerViewCtrl',
+		controller: 'ManufacturerCtrl',
 		resolve: {
-			manufacturer: function($q, $http, $route) {
+			manufacturer: function($route, Utils) {
 				var id = $route.current.params.id;
-				var promise = $http({ method: 'GET', url: '/manufacturer/'+id }).success(function(data, status, headers, config) {
-					return data;
-				});
-				return promise;
+				return Utils.getManufacturer(id);
 			}
 		}
 	})
@@ -115,28 +170,27 @@ angular
 		templateUrl: 'partials/view/manufacturers.html',
 		controller: 'ManufacturersViewCtrl',
 		resolve: {
-			manufacturers: function($http) {
-				var promise = $http({ method: 'GET', url: '/manufacturers' }).success(function(data, status, headers, config) {
-					return data;
-				});
-				return promise;
+			manufacturers: function(Utils) {
+				return Utils.getManufacturers();
 			}
 		}
 	})
 	.when('/transporter/add', {
 		templateUrl: 'partials/add/transporter.html',
-		controller: 'TransporterCtrl'
+		controller: 'TransporterCtrl',
+		resolve: {
+			transporter: function() {
+				return {};
+			}
+		}
 	})
 	.when('/transporter/:id', {
 		templateUrl: 'partials/add/transporter.html',
-		controller: 'TransporterViewCtrl',
+		controller: 'TransporterCtrl',
 		resolve: {
-			transporter: function($q, $http, $route) {
+			transporter: function($route, Utils) {
 				var id = $route.current.params.id;
-				var promise = $http({ method: 'GET', url: '/transporter/'+id }).success(function(data, status, headers, config) {
-					return data;
-				});
-				return promise;
+				return Utils.getTransporter(id);
 			}
 		}
 	})
@@ -144,11 +198,23 @@ angular
 		templateUrl: 'partials/view/transporters.html',
 		controller: 'TransportersViewCtrl',
 		resolve: {
-			transporters: function($http) {
-				var promise = $http({ method: 'GET', url: '/transporters' }).success(function(data, status, headers, config) {
-					return data;
-				});
-				return promise;
+			transporters: function(Utils) {
+				return Utils.getTransporters();
+			}
+		}
+	})
+	.when('/sale/add', {
+		templateUrl: 'partials/add/sale.html',
+		controller: 'SaleCtrl',
+		resolve: {
+			sale: function() {
+				return {};
+			},
+			dealers: function(Utils) {
+				return Utils.getDealers();
+			},
+			item_types: function(Utils) {
+				return Utils.getItemTypes();
 			}
 		}
 	});

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html data-ng-app="index">
 <head>
-	<title>Sanjay Sales</title>
+	<title ng-bind="heading"></title>
 	<link rel="stylesheet" href="/bower_components/bootstrap-css-only/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
@@ -114,11 +114,13 @@
 	<script src="/bower_components/angular-route/angular-route.min.js"></script>
 	<script src="/bower_components/angular-resource/angular-resource.min.js"></script>
 	<script src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+	<script src="/bower_components/angular-filter/dist/angular-filter.min.js"></script>
 	<script src="/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
 	<script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 	<script src="/scripts/index.js"></script>
 	<script src="/scripts/dealer.js"></script>
 	<script src="/scripts/manufacturer.js"></script>
 	<script src="/scripts/transporter.js"></script>
+	<script src="/scripts/sale.js"></script>
 </body>
 </html>

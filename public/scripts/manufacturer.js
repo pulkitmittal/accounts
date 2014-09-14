@@ -1,10 +1,11 @@
 angular
 .module('index')
-.controller('ManufacturerCtrl', function($scope, $http, $rootScope, $route, $window, states, Utils) {
+.controller('ManufacturerCtrl', function($scope, $http, $rootScope, $route, $window, manufacturer, states, Utils) {
 	
 	$scope.isEmpty = Utils.isEmpty;
 	$scope.getLocation = Utils.getLocation;
 	$scope.states = states;
+	$scope.manufacturer = manufacturer && manufacturer.status === 200 && manufacturer.data.done === true ? manufacturer.data.response : {};
 
 	$scope.setLocation = function($item) {
 		if(!$item || $item.terms.length < 3)
@@ -87,9 +88,6 @@ angular
 			});
 		}
 	};
-})
-.controller('ManufacturerViewCtrl', function($scope, $http, manufacturer) {
-	$scope.manufacturer = manufacturer && manufacturer.status === 200 && manufacturer.data.done === true ? manufacturer.data.response : {};
 })
 .controller('ManufacturersViewCtrl', function($scope, $http, manufacturers) {
 	$scope.manufacturers = manufacturers && manufacturers.status === 200 && manufacturers.data.done === true ? manufacturers.data.response : [];
