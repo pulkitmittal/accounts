@@ -1,6 +1,6 @@
 angular
 .module('index')
-.controller('TransporterCtrl', function($scope, $http, $rootScope, $route, $window, transporter, states, Utils) {
+.controller('TransporterCtrl', function($scope, $http, $rootScope, $route, transporter, states, Utils) {
 	
 	$scope.isEmpty = Utils.isEmpty;
 	$scope.getLocation = Utils.getLocation;
@@ -56,6 +56,10 @@ angular
 		$route.reload();
 	};
 	
+})
+.controller('TransportersViewCtrl', function($scope, $http, $window, transporters) {
+	$scope.transporters = transporters && transporters.status === 200 && transporters.data.done === true ? transporters.data.response : [];
+	
 	$scope.deleteTransporter = function(transporter, $index) {
 		var id = transporter.ID;
 		var deleteConfirm = $window.confirm('Are you sure you want to delete '+transporter.NAME+'?');
@@ -88,7 +92,4 @@ angular
 			});
 		}
 	};
-})
-.controller('TransportersViewCtrl', function($scope, $http, transporters) {
-	$scope.transporters = transporters && transporters.status === 200 && transporters.data.done === true ? transporters.data.response : [];
 });

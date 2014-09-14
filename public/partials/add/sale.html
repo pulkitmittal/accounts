@@ -10,6 +10,7 @@
 				<label class="col-sm-3 control-label">Type:</label>
 				<div class="col-sm-9">
 					<select ng-model="sale.type" class="form-control">
+						<option value="" disabled>--Select Sale Type--</option>
 						<option value="Sales Invoice">Sales Invoice</option>
 						<option value="Tax Invoice">Tax Invoice</option>
 					</select>
@@ -19,14 +20,21 @@
 			<div class="form-group" ng-class="{'has-error': errors.dealer}">
 				<label class="col-sm-3 control-label">Dealer*:</label>
 				<div class="col-sm-9">
-					<input type="text" ng-model="sale.dealer" value=""
-						placeholder="Start typing..." class="form-control"
-						typeahead="dealer as dealer.NAME+', '+dealer.CITY for dealer in dealers | omit: filterDealer | filterBy:['NAME']:$viewValue | limitTo: 10"
-						ng-trim="true" >
+					<div class="input-group">
+						<input type="text" ng-model="sale.dealer" value=""
+							placeholder="Start typing..." class="form-control"
+							typeahead="dealer as dealer.NAME+', '+dealer.CITY for dealer in dealers | omit: filterDealer | filterBy:['NAME']:$viewValue | limitTo: 10"
+							typeahead-editable="false" ng-trim="true" >
+						<span class="input-group-btn">
+							<a type="button" class="btn btn-default" title="Add a dealer" ng-href="#dealer/add">
+								<i class="glyphicon glyphicon-plus"></i>
+							</a>
+						</span>
+					</div>
 					<p class="help-block" ng-bind="errors.city"></p>
 				</div>
 			</div>
-			<div class="form-group" ng-class="{'has-error': errors.invoice_no}">
+			<div class="form-group" ng-class="{'has-error': errors.invoice_no || isNaN(sale.invoice_no)}">
 				<label class="col-sm-3 control-label">Invoice #:</label>
 				<div class="col-sm-9">
 					<input type="text" ng-model="sale.invoice_no" class="form-control" value=""
@@ -53,17 +61,87 @@
 			<div class="form-group" ng-class="{'has-error': errors.item_type}">
 				<label class="col-sm-3 control-label">Item Type:</label>
 				<div class="col-sm-9">
-					<select ng-model="sale.item_type" class="form-control" ng-options="type as type.NAME for type in item_types | orderBy: 'NAME'">
-						<option value="">--Select Item Type--</option>
+					<select ng-model="sale.item_type" class="form-control" ng-change="update()"
+						ng-options="type as type.NAME for type in item_types | orderBy: 'NAME'">
+						<option value="" disabled>--Select Item Type--</option>
 					</select>
 					<p class="help-block" ng-bind="errors.item_type"></p>
 				</div>
 			</div>
-			<div class="form-group" ng-class="{'has-error': errors.tin}">
-				<label class="col-sm-3 control-label">TIN:</label>
+			<div class="form-group" ng-class="{'has-error': errors.item_quantity || isNaN(sale.item_quantity)}">
+				<label class="col-sm-3 control-label">Item Quantity:</label>
 				<div class="col-sm-9">
-					<input type="text" ng-model="sale.tin" class="form-control" value="" ng-trim="">
+					<div class="input-group">
+						<input type="text" ng-model="sale.item_quantity" class="form-control" ng-change="update()"
+							ng-trim="true">
+						<span class="input-group-addon">Kg</span>
+					</div>
+					<p class="help-block" ng-bind="errors.item_quantity"></p>
+				</div>
+			</div>
+			<div class="form-group" ng-class="{'has-error': errors.item_rate || isNaN(sale.item_rate)}">
+				<label class="col-sm-3 control-label">Item Rate:</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<input type="text" ng-model="sale.item_rate" class="form-control" ng-change="update()"
+							ng-trim="true">
+						<span class="input-group-addon">per Kg</span>
+					</div>
+					<p class="help-block" ng-bind="errors.item_rate"></p>
+				</div>
+			</div>
+			<div class="form-group" ng-class="{'has-error': errors.vat_tax}">
+				<label class="col-sm-3 control-label">VAT:</label>
+				<div class="col-sm-9">
+					<div class="row">
+						<div class="col-sm-3">
+							<input type="text" ng-model="sale.vat_rate" class="form-control" ng-trim="" readonly>
+						</div>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<span class="input-group-addon">&#8377;</span>
+								<input type="text" ng-model="sale.vat_tax" class="form-control" ng-change="update()" ng-trim="">
+							</div>
+						</div>
+					</div>
 					<p class="help-block" ng-bind="errors.tin"></p>
+				</div>
+			</div>
+			<div class="form-group" ng-class="{'has-error': errors.add_tax}">
+				<label class="col-sm-3 control-label">Add Tax:</label>
+				<div class="col-sm-9">
+					<div class="row">
+						<div class="col-sm-3">
+							<input type="text" ng-model="sale.add_rate" class="form-control" value="" ng-trim="" readonly>
+						</div>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<span class="input-group-addon">&#8377;</span>
+								<input type="text" ng-model="sale.add_tax" class="form-control" ng-change="update()" ng-trim="">
+							</div>
+						</div>
+					</div>
+					<p class="help-block" ng-bind="errors.tin"></p>
+				</div>
+			</div>
+			<div class="form-group" ng-class="{'has-error': errors.invoice_amount || isNaN(sale.invoice_amount)}">
+				<label class="col-sm-3 control-label">Invoice Amount:</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<span class="input-group-addon">&#8377;</span>
+						<input type="text" ng-model="sale.invoice_amount" class="form-control" ng-trim="">
+					</div>
+					<p class="help-block" ng-bind="errors.invoice_amount"></p>
+				</div>
+			</div>
+			<div class="form-group" ng-class="{'has-error': errors.credit_amount || isNaN(sale.credit_amount) || sale.credit_amount > sale.invoice_amount}">
+				<label class="col-sm-3 control-label">Credit Amount:</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<span class="input-group-addon">&#8377;</span>
+						<input type="text" ng-model="sale.credit_amount" class="form-control" ng-trim="">
+					</div>
+					<p class="help-block" ng-bind="errors.credit_amount"></p>
 				</div>
 			</div>
 			<div class="pull-right">*All fields are required</div>

@@ -1,6 +1,6 @@
 angular
 .module('index')
-.controller('ManufacturerCtrl', function($scope, $http, $rootScope, $route, $window, manufacturer, states, Utils) {
+.controller('ManufacturerCtrl', function($scope, $http, $rootScope, $route, manufacturer, states, Utils) {
 	
 	$scope.isEmpty = Utils.isEmpty;
 	$scope.getLocation = Utils.getLocation;
@@ -56,6 +56,10 @@ angular
 		$route.reload();
 	};
 	
+})
+.controller('ManufacturersViewCtrl', function($scope, $http, $window, manufacturers) {
+	$scope.manufacturers = manufacturers && manufacturers.status === 200 && manufacturers.data.done === true ? manufacturers.data.response : [];
+	
 	$scope.deleteManufacturer = function(manufacturer, $index) {
 		var id = manufacturer.ID;
 		var deleteConfirm = $window.confirm('Are you sure you want to delete '+manufacturer.NAME+'?');
@@ -88,7 +92,4 @@ angular
 			});
 		}
 	};
-})
-.controller('ManufacturersViewCtrl', function($scope, $http, manufacturers) {
-	$scope.manufacturers = manufacturers && manufacturers.status === 200 && manufacturers.data.done === true ? manufacturers.data.response : [];
 });

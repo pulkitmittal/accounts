@@ -1,6 +1,6 @@
 angular
 .module('index')
-.controller('DealerCtrl', function($scope, $http, $rootScope, $route, $window, dealer, states, Utils) {
+.controller('DealerCtrl', function($scope, $http, $rootScope, $route, dealer, states, Utils) {
 	
 	$scope.isEmpty = Utils.isEmpty;
 	$scope.getLocation = Utils.getLocation;
@@ -56,6 +56,10 @@ angular
 		$route.reload();
 	};
 	
+})
+.controller('DealersViewCtrl', function($scope, $http, $rootScope, $window, dealers) {
+	$scope.dealers = dealers && dealers.status === 200 && dealers.data.done === true ? dealers.data.response : [];
+	
 	$scope.deleteDealer = function(dealer, $index) {
 		var id = dealer.ID;
 		var deleteConfirm = $window.confirm('Are you sure you want to delete '+dealer.NAME+'?');
@@ -88,7 +92,4 @@ angular
 			});
 		}
 	};
-})
-.controller('DealersViewCtrl', function($scope, $http, $rootScope, dealers) {
-	$scope.dealers = dealers && dealers.status === 200 && dealers.data.done === true ? dealers.data.response : [];
 });

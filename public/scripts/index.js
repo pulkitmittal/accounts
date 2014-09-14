@@ -112,6 +112,13 @@ angular
 		$root.message = messages.notfound;
 		$root.loadingView = false;
 	});
+	
+	angular.element(document).on("keydown", function (e) {
+		var tag = angular.element(e.target)[0].tagName.toLowerCase();
+	    if (e.which === 8 && tag !== "input" && tag !== "textarea") {
+	        e.preventDefault();
+	    }
+	});
 }])
 .config(function($routeProvider, $locationProvider) {
 	$routeProvider

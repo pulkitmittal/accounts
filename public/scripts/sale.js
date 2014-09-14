@@ -8,12 +8,30 @@ angular
 	$scope.item_types = item_types && item_types.status === 200 && item_types.data.done === true ? item_types.data.response : [];
 	
 	$scope.filterDealer = function(elm) {
-		if($scope.sale.type == 'Tax Invoice') {
+		if($scope.sale.type === 'Tax Invoice') {
 			return !elm.TIN;
-		} else if($scope.sale.type == 'Sales Invoice') {
+		} else if($scope.sale.type === 'Sales Invoice') {
 			return !!elm.TIN;
 		} else {
 			return false;
+		}
+	};
+	
+	$scope.isNaN = function(val) {
+		return val ? isNaN(val) : false;
+	};
+	
+	$scope.update = function() {
+		var sale = $scope.sale;
+		var item_type = sale.item_type;
+		if(!item_type)
+			return;
+		sale.vat_rate = item_type.VAT_TAX.toFixed(2);
+		sale.add_rate = item_type.ADD_TAX.toFixed(2);
+		if(sale.item_quantity && sale.item_rate) {
+			sale.vat_tax = sale.item_quantity * sale.item_rate * sale.vat_rate / 100;
+			sale.add_tax = sale.item_quantity * sale.item_rate * sale.add_rate / 100;
+			sale.invoice_amount = sale.item_quantity * sale.item_rate + sale.vat_tax + sale.add_tax;
 		}
 	};
 	
@@ -67,6 +85,10 @@ angular
 		$route.reload();
 	};
 	
+})
+.controller('SalesViewCtrl', function($scope, $http, $window, sales) {
+	$scope.sales = sales && sales.status === 200 && sales.data.done === true ? sales.data.response : [];
+	
 	$scope.deleteSale = function(sale, $index) {
 		var id = sale.ID;
 		var deleteConfirm = $window.confirm('Are you sure you want to delete '+sale.NAME+'?');
@@ -99,7 +121,4 @@ angular
 			});
 		}
 	};
-})
-.controller('SalesViewCtrl', function($scope, $http, sales) {
-	$scope.sales = sales && sales.status === 200 && sales.data.done === true ? sales.data.response : [];
 });

@@ -2,10 +2,17 @@ var utils = require('./utils');
 
 module.exports = function (app, mysql) {
 	
-	/*app.post('/dealer/add', function (req, res) {
+	app.post('/sale/add', function (req, res) {
 
 		// apply validations
-		var dealer = req.body.dealer;
+		var sale = req.body.sale;
+		
+		console.log(sale);
+		res.json({
+			done: false,
+			error: 'In progress'
+		});
+		/*var dealer = req.body.dealer;
 		var errors = {};
 		if(utils.isEmpty(dealer.name)) {
 			errors.name = 'This is required.';
@@ -50,10 +57,10 @@ module.exports = function (app, mysql) {
 					});
 				});
 			}
-		}
+		}*/
 	});
 	
-	app.post('/dealer/delete/:id', function(req, res) {
+	/*app.post('/dealer/delete/:id', function(req, res) {
 		var id = req.params.id;
 		console.log('Request to delete dealer:' + id);
 		if(!id) {

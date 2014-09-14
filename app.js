@@ -92,6 +92,7 @@ app.use(function(error, req, res, next) {
 require("./routes/dealercontroller.js")(app, connection);
 require("./routes/manufacturercontroller.js")(app, connection);
 require("./routes/transportercontroller.js")(app, connection);
+require("./routes/salecontroller.js")(app, connection);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
