@@ -2,15 +2,11 @@
 
 # accounts
 
-
-
-## Usage
-
-
+This application was being developed with the idea that it would make accounting (billing, stock management, invoice generation, tax reports, etc.) much simpler.
 
 ## Developing
 
-
+Not being developed currently, neither open for reproduction or modifications.
 
 ### Tools
 
